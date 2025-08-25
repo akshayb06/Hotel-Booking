@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @media screen and (max-width: 600px) {
+            header {
+                height: auto;
+                padding: 10px 0;
+                text-align: center;
+                display: flex;
+                justify-content: space-between;
+            }
+            .left{
+                flex: 1;
+            }
+            .left, .right {
+                margin: 0;
+            }
+            .right {
+                font-size: 10px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            header i {
+                font-size: 10px;
+                margin: 0 10px;
+            }
+            h2 {
+                text-align: start;
+                font-size: 15px;
+            }
+            header p{
+                font-size: 10px;
+            }
+            .bookings {
+                flex-direction: column;
+                margin: 10px 0;
+                align-items: center;
+            }
+            .one {
+                width: 90vw;
+                height: auto;
+                margin: 10px 0;
+            }
+            .one img {
+                height: 180px;
+                object-fit: cover;
+            }
+            .one form {
+                flex-direction: column;
+                align-items: stretch;
+                margin: 10px 0;
+            }
+            .one input {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .one button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            height: 80px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #d0d0d0;
+        }
+        .fa-house{
+            margin: 0 15px 0 15px;
+            font-size: 40px;
+            text-decoration: none;
+            color: #FF8C00;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #555;
+            display: flex;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .left {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .right{
+            margin-right: 20px;
+        }
+        .right button {
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .right button:hover {
+            background-color: #e07b00;
+        }
+        .right button i {
+            margin-right: 5px;
+        }
+        .toggle-container {
+            position: absolute;
+            left: 25%;
+            display: flex;
+            border-radius: 50px;
+            padding: 5px;
+            width: 50%;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .toggle-container input[type="radio"] {
+            display: none;
+        }
+        .toggle-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+        #book:checked ~ label[for="book"],
+        #bookings:checked ~ label[for="bookings"] {
+            background-color: #ff9d25;
+            border: 2px solid #2196F3;
+        }
+        .bookings{
+            width: 100%;
+            margin: 20px;
+            display: flex;
+            justify-content: space-evenly;
+            overflow-x: auto;
+        }
+        .one{
+            width: 300px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+        .one img{
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+        .one p, .one h2{
+            margin-right: 15px;
+            margin-left: 15px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .one form{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-left: 15px;
+            margin-right: 15px;
+            align-items: center;
+        }
+        .one input{
+            height: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 100px;
+        }
+        .one button{
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background-color: #ff9d25;
+            border: 1px solid transparent;
+            border-radius: 6px;
+        }
+        footer {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+        footer a {
+            color: #ff9d25;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        footer a:hover {
+            color: #ffffff;
+        }
+        footer p {
+            margin: 5px 0;
+        }
+        @media screen and (max-width:600px) {
+            .toggle-container {
+                font-size: 10px;
+                padding: 2px;
+                align-content: center;
+            }
+            .toggle-option {
+                font-size: 10px;
+                padding: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="home.html"><i class="fa-solid fa-house"></i></a>
+        <div class="left">
+            <h2>Hall Booking Home</h2>
+            <p>Welcome back,<span id="username"> </span></p>
+        </div>
+        <div class="right">
+            <button onclick="window.location.href='login.html'"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</button>
+        </div>
+    </header>
+    <div class="toggle-container">
+        <input type="radio" id="book" name="toggle" checked>
+        <label for="book" class="toggle-option">Book Hall</label>
+        <input type="radio" id="bookings" name="toggle">
+        <label for="bookings" class="toggle-option">My Bookings</label>
+    </div>
+
+    <div id="book-hall" class="bookings">
+        <div class="one">
+            <img src="1.jpg" width="100%" height="46%">
+            <h2>Hall Suites</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="2.jpg" width="100%" height="46%">
+            <h2>YOLE Affittacamere</h2>
+            <p>Located in Empoli, 30 km from Montecatini Train Station, 
+                YOLE Affittacamere provides air-conditioned rooms with free WiFi. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="3.jpg" width="100%" height="46%">
+            <h2>Borgo San Guisto</h2>
+            <p>Borgo San Giusto is located in Empoli and features a pool with a view and garden views. 
+                There is an on-site restaurant, plus free private parking and free WiFi are available.  </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="1.jpg" width="100%" height="46%">
+            <h2>Suites</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="2.jpg" width="100%" height="46%">
+            <h2>Hall</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="3.jpg" width="100%" height="46%">
+            <h2>YOLE</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+    </div>
+    <div id="book-hall-copy" class="bookings">
+        <div class="one">
+            <img src="1.jpg" width="100%" height="46%">
+            <h2>Hall-Suites</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="2.jpg" width="100%" height="46%">
+            <h2>Affittacamere</h2>
+            <p>Located in Empoli, 30 km from Montecatini Train Station, 
+                YOLE Affittacamere provides air-conditioned rooms with free WiFi. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="3.jpg" width="100%" height="46%">
+            <h2>Borgo</h2>
+            <p>Borgo San Giusto is located in Empoli and features a pool with a view and garden views. 
+                There is an on-site restaurant, plus free private parking and free WiFi are available.  </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="1.jpg" width="100%" height="46%">
+            <h2>Hall San</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="2.jpg" width="100%" height="46%">
+            <h2>Hall Guisto</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+        <div class="one">
+            <img src="3.jpg" width="100%" height="46%">
+            <h2>Borgo Guisto</h2>
+            <p>Offering city views, Hall Suites is an accommodation 
+                located in Empoli, 31 km from Montecatini Train Station 
+                and 31 km from Fortezza da Basso - Convention Center. </p>
+            <p>200m away from you</p>
+            <p id="price" style="font-size: 20px;">Price: </p>
+            <form class="booking-form">
+                <input type="number" min="1" step="1" placeholder="No. of days" required />
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="my-bookings" class="bookings" style="display: none; flex-wrap: wrap;">
+    <!-- Booked hall cards will appear here -->
+    </div>
+
+    <footer style="background-color: #333; color: #fff; text-align: center; padding: 20px 10px; margin-top: 40px; font-size: 14px;">
+    <p>&copy; 2025 Hall Booking. All rights reserved.</p>
+    <p>Made with ❤️ for better hospitality.</p>
+    <div style="margin-top: 10px;">
+        <a href="#" style="color: #ff9d25; margin: 0 10px; text-decoration: none;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" style="color: #ff9d25; margin: 0 10px; text-decoration: none;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color: #ff9d25; margin: 0 10px; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+    </div>
+    </footer>
+
+<script>
+window.onload = function () {
+    const username = localStorage.getItem("username");
+    document.getElementById("username").innerText = username || "Guest";
+
+    let bookings = JSON.parse(localStorage.getItem("myBookings")) || [];
+    const myBookingsSection = document.getElementById("my-bookings");
+
+    // Render booked halls into My Bookings
+    bookings.forEach(b => {
+        const card = createHallCard(b.img, b.title, b.description, b.days);
+        myBookingsSection.appendChild(card);
+    });
+
+    // Handle all halls in both book-hall sections
+    const allHallCards = document.querySelectorAll("#book-hall .one, #book-hall-copy .one");
+    allHallCards.forEach(card => {
+        const title = card.querySelector("h2")?.innerText || "";
+        const description = card.querySelectorAll("p")[0]?.innerText || "";
+        const img = card.querySelector("img")?.getAttribute("src") || "";
+        const form = card.querySelector("form");
+        const input = form.querySelector("input");
+        const button = form.querySelector("button");
+
+        const alreadyBooked = bookings.find(b => b.title === title);
+        if (alreadyBooked) {
+            button.innerText = "Booked";
+            button.disabled = true;
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const days = input.value.trim();
+            if (!days) return;
+
+            const booking = { title, description, img, days };
+            bookings.push(booking);
+            localStorage.setItem("myBookings", JSON.stringify(bookings));
+
+            const bookedCard = createHallCard(img, title, description, days);
+            myBookingsSection.appendChild(bookedCard);
+
+            // Update all matching buttons in both sections
+            allHallCards.forEach(c => {
+                const t = c.querySelector("h2")?.innerText || "";
+                if (t === title) {
+                    const btn = c.querySelector("button");
+                    btn.innerText = "Booked";
+                    btn.disabled = true;
+                }
+            });
+        });
+    });
+
+    // Toggle visibility
+    const toggleBook = document.getElementById("book");
+    const toggleBookings = document.getElementById("bookings");
+    const bookHall = document.getElementById("book-hall");
+    const bookHallCopy = document.getElementById("book-hall-copy");
+
+    toggleBook.addEventListener("change", () => {
+        bookHall.style.display = "flex";
+        bookHallCopy.style.display = "flex";
+        myBookingsSection.style.display = "none";
+    });
+
+    toggleBookings.addEventListener("change", () => {
+        bookHall.style.display = "none";
+        bookHallCopy.style.display = "none";
+        myBookingsSection.style.display = "flex";
+    });
+
+    // Create booking card for My Bookings
+    function createHallCard(imgSrc, title, desc, days) {
+        const div = document.createElement("div");
+        div.className = "one";
+        div.innerHTML = `
+            <img src="${imgSrc}" width="100%" height="46%">
+            <h2>${title}</h2>
+            <p>${desc}</p>
+            <p><strong>Booked for ${days} day(s)</strong></p>
+            <button class="cancel-btn" style="margin: 10px; background-color: red; color: white; border: none; padding: 8px; border-radius: 6px;">Cancel Booking</button>
+        `;
+
+        div.querySelector(".cancel-btn").addEventListener("click", () => {
+            div.remove();
+            bookings = bookings.filter(b => b.title !== title);
+            localStorage.setItem("myBookings", JSON.stringify(bookings));
+
+            // Re-enable buttons in both book-hall sections
+            allHallCards.forEach(c => {
+                const t = c.querySelector("h2")?.innerText || "";
+                if (t === title) {
+                    const btn = c.querySelector("button");
+                    btn.innerText = "Book Now";
+                    btn.disabled = false;
+                }
+            });
+        });
+
+        return div;
+    }
+
+    // Initial toggle visibility
+    if (toggleBook.checked) {
+        bookHall.style.display = "flex";
+        bookHallCopy.style.display = "flex";
+        myBookingsSection.style.display = "none";
+    } else {
+        bookHall.style.display = "none";
+        bookHallCopy.style.display = "none";
+        myBookingsSection.style.display = "flex";
+    }
+};
+</script>
+</body>
+</html>
